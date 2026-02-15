@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>whenIsBaby</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf8f3;
+    --blush: #f2c4b8;
+    --rose: #d98e82;
+    --deep-rose: #b5665a;
+    --sage: #8aab8e;
+    --warm-brown: #7a5c52;
+    --text: #3d2b26;
+    --text-light: #8c6e68;
+    --card-bg: #fffaf7;
+    --shadow: 0 4px 24px rgba(100,60,50,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -120px; right: -120px;
+    width: 480px; height: 480px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f2c4b840 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -80px; left: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #8aab8e30 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  header {
+    text-align: center;
+    padding: 52px 24px 28px;
+    position: relative; z-index: 1;
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    color: var(--deep-rose);
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .logo em { font-style: italic; color: var(--rose); }
+  .tagline {
+    font-size: 0.92rem;
+    color: var(--text-light);
+    margin-top: 8px;
+    font-weight: 300;
+    letter-spacing: 0.4px;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative; z-index: 1;
+  }
+
+  .input-card {
+    background: var(--card-bg);
+    border-radius: 28px;
+    padding: 38px 44px;
+    box-shadow: var(--shadow);
+    border: 1px solid #f0e4de;
+    margin-bottom: 40px;
+  }
+  .input-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    color: var(--warm-brown);
+    margin-bottom: 28px;
+  }
+
+  label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-light);
+    letter-spacing: 0.9px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .slider-section { margin-bottom: 8px; }
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 14px;
+  }
+  .slider-week-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--deep-rose);
+    line-height: 1;
+  }
+  .slider-week-val span { font-size: 0.9rem; color: var(--text-light); font-family: 'DM Sans', sans-serif; }
+
+  .slider-track-wrap {
+    position: relative;
+    height: 36px;
+    display: flex;
+    align-items: center;
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 100px;
+    background: #f0e4de;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose), var(--deep-rose));
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(180,100,90,0.38);
+    border: 3px solid white;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 5px 18px rgba(180,100,90,0.48);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose), var(--deep-rose));
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(180,100,90,0.38);
+    border: 3px solid white;
+  }
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: var(--text-light);
+    margin-top: 6px;
+    padding: 0 2px;
+  }
+  .trimester-dots {
+    display: flex;
+    gap: 0;
+    margin-top: 10px;
+    border-radius: 100px;
+    overflow: hidden;
+    height: 4px;
+  }
+  .t-dot { flex: 1; }
+  .t-dot.t1 { background: #f2c4b8; }
+  .t-dot.t2 { background: #d98e82; }
+  .t-dot.t3 { background: #b5665a; }
+  .trimester-label-row {
+    display: flex;
+    font-size: 0.68rem;
+    color: var(--text-light);
+    margin-top: 5px;
+  }
+  .trimester-label-row span { flex: 1; }
+  .trimester-label-row span:nth-child(2) { text-align: center; }
+  .trimester-label-row span:nth-child(3) { text-align: right; }
+
+  .btn-go {
+    background: linear-gradient(135deg, var(--rose), var(--deep-rose));
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 16px rgba(180,100,90,0.28);
+    margin-top: 20px;
+    width: 100%;
+  }
+  .btn-go:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(180,100,90,0.38); }
+
+  .or-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-light);
+    font-size: 0.82rem;
+    margin: 28px 0 24px;
+  }
+  .or-divider::before, .or-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e8d6cf;
+  }
+
+  .calendar-section label { margin-bottom: 12px; }
+  .calendar-widget {
+    background: var(--cream);
+    border: 1.5px solid #e8d6cf;
+    border-radius: 20px;
+    overflow: hidden;
+    user-select: none;
+  }
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, var(--rose), var(--deep-rose));
+    color: white;
+  }
+  .cal-nav {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    border-radius: 50%;
+    width: 32px; height: 32px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .cal-nav:hover { background: rgba(255,255,255,0.32); }
+  .cal-month-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-align: center;
+    flex: 1;
+  }
+  .cal-grid {
+    padding: 10px 14px 14px;
+  }
+  .cal-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-light);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .cal-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+  }
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+    color: var(--text);
+    font-weight: 400;
+  }
+  .cal-day:hover:not(.cal-day--empty):not(.cal-day--future) {
+    background: #f2c4b8;
+    color: var(--deep-rose);
+  }
+  .cal-day--empty { cursor: default; }
+  .cal-day--future {
+    color: #d8c5bf;
+    cursor: not-allowed;
+  }
+  .cal-day--today {
+    border: 1.5px solid var(--rose);
+    color: var(--rose);
+    font-weight: 500;
+  }
+  .cal-day--selected {
+    background: linear-gradient(135deg, var(--rose), var(--deep-rose)) !important;
+    color: white !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(180,100,90,0.35);
+  }
+  .cal-selected-display {
+    text-align: center;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    border-top: 1px solid #f0e4de;
+    min-height: 38px;
+  }
+  .cal-selected-display strong { color: var(--deep-rose); }
+
+  #results {
+    display: none;
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .progress-hero {
+    background: linear-gradient(135deg, #d98e82, #b5665a);
+    border-radius: 28px;
+    padding: 44px;
+    color: white;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(180,100,90,0.32);
+  }
+  .progress-hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+  }
+  .progress-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 40%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .hero-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    position: relative; z-index: 1;
+  }
+  .week-display { flex: 1; }
+  .week-label { font-size: 0.82rem; letter-spacing: 1.2px; text-transform: uppercase; opacity: 0.75; margin-bottom: 4px; }
+  .week-number { font-family: 'Playfair Display', serif; font-size: 5rem; line-height: 1; font-weight: 600; }
+  .week-suffix { font-size: 1.6rem; opacity: 0.7; }
+  .week-sub { font-size: 0.9rem; opacity: 0.8; margin-top: 6px; }
+  .trimester-badge {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    margin-top: 12px;
+  }
+  .due-date-display { text-align: right; position: relative; z-index: 1; }
+  .due-date-display .label { font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; opacity: 0.7; margin-bottom: 4px; }
+  .due-date-display .date { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600; }
+  .due-date-display .days-left { font-size: 0.85rem; opacity: 0.75; margin-top: 4px; }
+
+  .progress-bar-wrap { margin-top: 28px; position: relative; z-index: 1; }
+  .progress-bar-labels { display: flex; justify-content: space-between; font-size: 0.75rem; opacity: 0.65; margin-bottom: 6px; }
+  .progress-bar-track { background: rgba(255,255,255,0.2); border-radius: 100px; height: 10px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; border-radius: 100px; background: white; transition: width 1s cubic-bezier(.25,.8,.25,1); position: relative; }
+  .progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.4);
+  }
+  .trimester-markers { display: flex; justify-content: space-between; font-size: 0.7rem; opacity: 0.55; margin-top: 6px; }
+
+  .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  @media(max-width: 600px) { .cards-grid { grid-template-columns: 1fr; } .input-card { padding: 28px 22px; } }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    border: 1px solid #f0e4de;
+  }
+  .card-icon { font-size: 2.8rem; margin-bottom: 12px; display: block; line-height: 1; }
+  .card-title { font-size: 0.75rem; font-weight: 500; color: var(--text-light); letter-spacing: 0.9px; text-transform: uppercase; margin-bottom: 8px; }
+  .card-main { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text); line-height: 1.2; }
+  .card-sub { font-size: 0.85rem; color: var(--text-light); margin-top: 6px; line-height: 1.4; }
+
+  .size-card { grid-column: 1 / -1; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .baby-visual { font-size: 5rem; line-height: 1; flex-shrink: 0; animation: float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .baby-size-info { flex: 1; min-width: 180px; }
+  .size-bars { margin-top: 14px; }
+  .size-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 0.82rem; color: var(--text-light); }
+  .size-bar-label { width: 56px; flex-shrink: 0; }
+  .size-bar-track { flex: 1; background: #f0e4de; border-radius: 100px; height: 6px; overflow: hidden; }
+  .size-bar-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--blush), var(--rose)); }
+  .size-bar-val { width: 48px; flex-shrink: 0; text-align: right; font-weight: 500; }
+
+  .due-section {
+    background: var(--card-bg);
+    border-radius: 22px;
+    padding: 32px;
+    box-shadow: var(--shadow);
+    border: 1px solid #f0e4de;
+    margin-bottom: 20px;
+  }
+  .due-section h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--warm-brown); margin-bottom: 20px; }
+  .events-list { display: flex; flex-direction: column; gap: 12px; }
+  .event-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 18px; border-radius: 14px; background: var(--cream); border: 1px solid #f0e4de; }
+  .event-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--rose); flex-shrink: 0; margin-top: 5px; }
+  .event-dot.sage { background: var(--sage); }
+  .event-dot.gold { background: #c9a96e; }
+  .event-text { flex: 1; }
+  .event-name { font-weight: 500; font-size: 0.95rem; }
+  .event-date { font-size: 0.82rem; color: var(--text-light); margin-top: 2px; }
+
+  .birthdays-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; margin-top: 4px; }
+  .birthday-card { background: var(--cream); border: 1px solid #f0e4de; border-radius: 16px; padding: 16px; text-align: center; }
+  .birthday-emoji { font-size: 2rem; margin-bottom: 8px; display: block; }
+  .birthday-name { font-weight: 500; font-size: 0.88rem; color: var(--text); }
+  .birthday-detail { font-size: 0.75rem; color: var(--text-light); margin-top: 3px; }
+
+  .milestone-list { display: flex; flex-direction: column; gap: 10px; }
+  .milestone-item { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--text); }
+  .milestone-check { width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg, var(--sage), #5d8e62); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: white; font-size: 0.7rem; }
+
+  .tips-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .tips-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.88rem; color: var(--text); line-height: 1.5; }
+  .tip-icon { flex-shrink: 0; font-size: 1rem; }
+
+  .star-display { display: flex; align-items: center; gap: 16px; margin-top: 4px; }
+  .star-emoji { font-size: 3rem; }
+  .star-info .star-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--text); }
+  .star-info .star-dates { font-size: 0.82rem; color: var(--text-light); margin-top: 3px; }
+  .star-traits { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .trait-tag { background: #f0e4de; color: var(--warm-brown); border-radius: 100px; padding: 3px 12px; font-size: 0.75rem; font-weight: 500; }
+  footer { text-align: center; padding: 24px; color: var(--text-light); font-size: 0.8rem; position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">when<em>Is</em>Baby</div>
+  <div class="tagline">a gentle guide through your pregnancy journey</div>
+</header>
+
+<div class="container">
+  <div class="input-card">
+    <h2>How far along are you? 🌸</h2>
+
+    <div class="slider-section">
+      <div class="slider-header">
+        <label style="margin:0">Weeks Pregnant</label>
+        <div class="slider-week-val" id="sliderVal">— <span>weeks</span></div>
+      </div>
+      <div class="slider-track-wrap">
+        <input type="range" id="weeksSlider" min="1" max="42" value="20"
+          oninput="onSliderMove(this.value)" />
+      </div>
+      <div class="slider-labels">
+        <span>1 wk</span><span>10</span><span>20</span><span>30</span><span>42 wks</span>
+      </div>
+      <div class="trimester-dots">
+        <div class="t-dot t1" style="flex:13"></div>
+        <div class="t-dot t2" style="flex:13"></div>
+        <div class="t-dot t3" style="flex:14"></div>
+      </div>
+      <div class="trimester-label-row">
+        <span>1st Trimester</span>
+        <span>2nd Trimester</span>
+        <span>3rd Trimester</span>
+      </div>
+      <button class="btn-go" onclick="calculateFromSlider()">Show My Journey ✨</button>
+    </div>
+
+    <div class="or-divider">or pick your last period from the calendar</div>
+
+    <div class="calendar-section">
+      <label>Last Menstrual Period</label>
+      <div class="calendar-widget">
+        <div class="cal-header">
+          <button class="cal-nav" onclick="calNav(-1)">&#8592;</button>
+          <div class="cal-month-year" id="calMonthYear"></div>
+          <button class="cal-nav" onclick="calNav(1)">&#8594;</button>
+        </div>
+        <div class="cal-grid">
+          <div class="cal-days-header">
+            <div>Su</div><div>Mo</div><div>Tu</div><div>We</div>
+            <div>Th</div><div>Fr</div><div>Sa</div>
+          </div>
+          <div class="cal-days" id="calDays"></div>
+        </div>
+        <div class="cal-selected-display" id="calSelectedDisplay">
+          Tap a date to select your last period 🩷
+        </div>
+      </div>
+      <button class="btn-go" style="margin-top:14px" onclick="calculateFromCalendar()">Calculate from Period Date ✨</button>
+    </div>
+  </div>
+
+  <div id="results"></div>
+</div>
+
+<footer>
+  whenIsBaby is for informational purposes only. Always consult your healthcare provider. 💗
+</footer>
+
+<script>
+let calYear, calMonth, selectedDate = null;
+let sliderMoved = false;
+
+const BABY_SIZES = {
+  4:{emoji:'🌱',fruit:'Poppy Seed',length:'0.1 cm',weight:'< 1 g'},
+  5:{emoji:'🫐',fruit:'Blueberry',length:'0.5 cm',weight:'< 1 g'},
+  6:{emoji:'🫛',fruit:'Sweet Pea',length:'0.6 cm',weight:'< 1 g'},
+  7:{emoji:'🫐',fruit:'Raspberry',length:'1.0 cm',weight:'< 1 g'},
+  8:{emoji:'🫘',fruit:'Kidney Bean',length:'1.6 cm',weight:'1 g'},
+  9:{emoji:'🍇',fruit:'Grape',length:'2.3 cm',weight:'2 g'},
+  10:{emoji:'🍓',fruit:'Strawberry',length:'3.1 cm',weight:'4 g'},
+  11:{emoji:'🍋',fruit:'Lime',length:'4.1 cm',weight:'7 g'},
+  12:{emoji:'🍋',fruit:'Lemon',length:'5.4 cm',weight:'14 g'},
+  13:{emoji:'🫑',fruit:'Pea Pod',length:'7.4 cm',weight:'23 g'},
+  14:{emoji:'🍑',fruit:'Peach',length:'8.7 cm',weight:'43 g'},
+  15:{emoji:'🍊',fruit:'Orange',length:'10.1 cm',weight:'70 g'},
+  16:{emoji:'🥑',fruit:'Avocado',length:'11.6 cm',weight:'100 g'},
+  17:{emoji:'🍐',fruit:'Pear',length:'13.0 cm',weight:'140 g'},
+  18:{emoji:'🥭',fruit:'Mango',length:'14.2 cm',weight:'190 g'},
+  19:{emoji:'🫑',fruit:'Heirloom Tomato',length:'15.3 cm',weight:'240 g'},
+  20:{emoji:'🍌',fruit:'Banana',length:'25.6 cm',weight:'300 g'},
+  21:{emoji:'🥕',fruit:'Carrot',length:'26.7 cm',weight:'360 g'},
+  22:{emoji:'🌽',fruit:'Corn',length:'27.8 cm',weight:'430 g'},
+  23:{emoji:'🍆',fruit:'Eggplant',length:'28.9 cm',weight:'501 g'},
+  24:{emoji:'🌽',fruit:'Corn on the Cob',length:'30.0 cm',weight:'600 g'},
+  25:{emoji:'🥦',fruit:'Cauliflower',length:'34.6 cm',weight:'660 g'},
+  26:{emoji:'🥬',fruit:'Lettuce Head',length:'35.6 cm',weight:'760 g'},
+  27:{emoji:'🥦',fruit:'Broccoli',length:'36.6 cm',weight:'875 g'},
+  28:{emoji:'🍆',fruit:'Large Eggplant',length:'37.6 cm',weight:'1.0 kg'},
+  29:{emoji:'🥥',fruit:'Coconut',length:'38.6 cm',weight:'1.15 kg'},
+  30:{emoji:'🎃',fruit:'Large Cabbage',length:'39.9 cm',weight:'1.3 kg'},
+  31:{emoji:'🥥',fruit:'Large Coconut',length:'41.1 cm',weight:'1.5 kg'},
+  32:{emoji:'🎃',fruit:'Squash',length:'42.4 cm',weight:'1.7 kg'},
+  33:{emoji:'🍍',fruit:'Pineapple',length:'43.7 cm',weight:'1.9 kg'},
+  34:{emoji:'🍈',fruit:'Cantaloupe',length:'45.0 cm',weight:'2.1 kg'},
+  35:{emoji:'🍈',fruit:'Honeydew',length:'46.2 cm',weight:'2.4 kg'},
+  36:{emoji:'🥬',fruit:'Romaine Head',length:'47.4 cm',weight:'2.6 kg'},
+  37:{emoji:'🥬',fruit:'Swiss Chard Bunch',length:'48.6 cm',weight:'2.9 kg'},
+  38:{emoji:'🫛',fruit:'Leek',length:'49.8 cm',weight:'3.1 kg'},
+  39:{emoji:'🍉',fruit:'Mini Watermelon',length:'50.7 cm',weight:'3.3 kg'},
+  40:{emoji:'🎃',fruit:'Pumpkin',length:'51.2 cm',weight:'3.4 kg'},
+  41:{emoji:'🎃',fruit:'Large Pumpkin',length:'51.7 cm',weight:'3.6 kg'},
+  42:{emoji:'🍉',fruit:'Watermelon',length:'52.0 cm',weight:'3.7 kg'},
+};
+
+const MILESTONES = {
+  4:['Heart begins to form','Neural tube developing','Placenta forming'],
+  8:['All major organs forming','Tiny fingers appearing','Heartbeat detectable'],
+  12:['Fingernails developing','Baby can yawn','Kidneys producing urine'],
+  16:['Baby can hear your voice','Gender may be visible','Facial expressions possible'],
+  20:['Halfway there! 🎉','Movements getting stronger','Sleep cycles forming'],
+  24:['Lungs developing surfactant','Eyelids open and close','Responds to loud sounds'],
+  28:['Brain developing rapidly','Eyes open for first time','Regular sleep/wake cycle'],
+  32:['Bones hardening','Practising breathing','Fat layers building up'],
+  36:['Most organs fully mature','Head may move into position','Gaining weight rapidly'],
+  40:['Fully developed and ready','Strong immune system','Ready to meet you! 💗'],
+};
+
+const WEEK_TIPS = {
+  4:['Take folic acid daily','Schedule your first prenatal appointment','Avoid alcohol and smoking'],
+  8:['Stay hydrated — 8–10 glasses of water daily','Ginger tea can help with nausea','Rest when you can'],
+  12:['First trimester screening is coming up','Energy levels often improve soon','Share your news if you\'re ready'],
+  16:['Consider prenatal yoga','Start sleeping on your left side','Anatomy scan coming up around week 20'],
+  20:['20-week anatomy scan — a big milestone!','Take bump photos to cherish later','Kegel exercises help now and after birth'],
+  24:['Start your birth plan thinking','Consider a childbirth class','Stay cool — heat can be tiring now'],
+  28:['Third trimester begins — you\'re so close!','Start kick counts daily','Pack your hospital bag soon'],
+  32:['Hospital bag should be packed','Group B strep test at week 36','Discuss your birth preferences with your provider'],
+  36:['Weekly prenatal visits begin','Prepare your home for baby\'s arrival','Rest as much as possible'],
+  40:['Your due date is here!','Stay close to home','Know the signs of labour — when to call your provider'],
+};
+
+const SEASONAL_EVENTS = {
+  0:[['🥂 New Year\'s Day','January 1'],['💘 Valentine\'s Day','February 14'],['🍀 St. Patrick\'s Day','March 17']],
+  1:[['🌸 Spring Equinox','~March 20'],['🐣 Easter (varies)','March–April'],['🌺 Mother\'s Day','2nd Sunday of May']],
+  2:[['☀️ Summer Solstice','~June 21'],['🎆 Independence Day (US)','July 4'],['🏖️ Long summer days','All summer']],
+  3:[['🍂 Autumn Equinox','~Sept 22'],['👻 Halloween','October 31'],['🦃 Thanksgiving (US)','4th Thursday, November']],
+  4:[['❄️ Winter Solstice','~Dec 21'],['🎄 Christmas','December 25'],['🥂 New Year\'s Eve','December 31']],
+};
+
+const FAMOUS_BIRTHDAYS_BY_MONTH = {
+  0:[
+    {n:'Elvis Presley',e:'🎸',d:'Jan 8'},
+    {n:'David Bowie',e:'🌟',d:'Jan 10'},
+    {n:'Michelle Obama',e:'🌺',d:'Jan 17'},
+    {n:'Muhammad Ali',e:'🥊',d:'Jan 17'},
+    {n:'Ellen DeGeneres',e:'🎤',d:'Jan 26'},
+    {n:'Oprah Winfrey',e:'✨',d:'Jan 29'},
+    {n:'Christian Bale',e:'🎬',d:'Jan 30'},
+    {n:'Justin Timberlake',e:'🎵',d:'Jan 31'},
+  ],
+
+  1:[
+    {n:'Harry Styles',e:'🎵',d:'Feb 1'},
+    {n:'Shakira',e:'💃',d:'Feb 2'},
+    {n:'Cristiano Ronaldo',e:'⚽',d:'Feb 5'},
+    {n:'Neymar',e:'⚽',d:'Feb 5'},
+    {n:'Jennifer Aniston',e:'🌟',d:'Feb 11'},
+    {n:'The Weeknd',e:'🎤',d:'Feb 16'},
+    {n:'Ed Sheeran',e:'🎸',d:'Feb 17'},
+    {n:'Michael Jordan',e:'🏀',d:'Feb 17'},
+    {n:'Rihanna',e:'🎤',d:'Feb 20'},
+    {n:'Drew Barrymore',e:'🎬',d:'Feb 22'},
+  ],
+
+  2:[
+    {n:'Justin Bieber',e:'🎵',d:'Mar 1'},
+    {n:'Shaquille O\'Neal',e:'🏀',d:'Mar 6'},
+    {n:'Albert Einstein',e:'🔬',d:'Mar 14'},
+    {n:'Stephen Curry',e:'🏀',d:'Mar 14'},
+    {n:'Elton John',e:'🎹',d:'Mar 25'},
+    {n:'Mariah Carey',e:'🎤',d:'Mar 27'},
+    {n:'Lady Gaga',e:'🎭',d:'Mar 28'},
+  ],
+
+  3:[
+    {n:'Robert Downey Jr.',e:'🎬',d:'Apr 4'},
+    {n:'Jackie Chan',e:'🥋',d:'Apr 7'},
+    {n:'Emma Watson',e:'✨',d:'Apr 15'},
+    {n:'Queen Elizabeth II',e:'👑',d:'Apr 21'},
+    {n:'John Cena',e:'💪',d:'Apr 23'},
+    {n:'Al Pacino',e:'🎬',d:'Apr 25'},
+  ],
+
+  4:[
+    {n:'David Beckham',e:'⚽',d:'May 2'},
+    {n:'Dwayne Johnson',e:'💪',d:'May 2'},
+    {n:'Audrey Hepburn',e:'🌟',d:'May 4'},
+    {n:'Adele',e:'🎵',d:'May 5'},
+    {n:'Cate Blanchett',e:'✨',d:'May 14'},
+    {n:'Mark Zuckerberg',e:'💻',d:'May 14'},
+  ],
+
+  5:[
+    {n:'Marilyn Monroe',e:'💫',d:'Jun 1'},
+    {n:'Angelina Jolie',e:'🎬',d:'Jun 4'},
+    {n:'Kanye West',e:'🎤',d:'Jun 8'},
+    {n:'Johnny Depp',e:'🎬',d:'Jun 9'},
+    {n:'Meryl Streep',e:'🎭',d:'Jun 22'},
+    {n:'Lionel Messi',e:'⚽',d:'Jun 24'},
+    {n:'Ariana Grande',e:'🎤',d:'Jun 26'},
+  ],
+
+  6:[
+    {n:'Princess Diana',e:'👑',d:'Jul 1'},
+    {n:'Tom Hanks',e:'🌟',d:'Jul 9'},
+    {n:'Vin Diesel',e:'🚗',d:'Jul 18'},
+    {n:'Selena Gomez',e:'🎵',d:'Jul 22'},
+    {n:'Daniel Radcliffe',e:'🪄',d:'Jul 23'},
+    {n:'Jennifer Lopez',e:'💃',d:'Jul 24'},
+  ],
+
+  7:[
+    {n:'Barack Obama',e:'🌍',d:'Aug 4'},
+    {n:'Kylie Jenner',e:'💄',d:'Aug 10'},
+    {n:'Jennifer Lawrence',e:'🎬',d:'Aug 15'},
+    {n:'Demi Lovato',e:'🎵',d:'Aug 20'},
+    {n:'Usain Bolt',e:'🏃',d:'Aug 21'},
+    {n:'Kobe Bryant',e:'🏀',d:'Aug 23'},
+    {n:'Michael Jackson',e:'🎤',d:'Aug 29'},
+  ],
+
+  8:[
+    {n:'Zendaya',e:'✨',d:'Sep 1'},
+    {n:'Keanu Reeves',e:'🌟',d:'Sep 2'},
+    {n:'Beyoncé',e:'👑',d:'Sep 4'},
+    {n:'Nick Jonas',e:'🎵',d:'Sep 16'},
+    {n:'Bruce Springsteen',e:'🎸',d:'Sep 23'},
+    {n:'Will Smith',e:'🎬',d:'Sep 25'},
+    {n:'Serena Williams',e:'🎾',d:'Sep 26'},
+  ],
+
+  9:[
+    {n:'Bruno Mars',e:'🎵',d:'Oct 8'},
+    {n:'Cardi B',e:'🎤',d:'Oct 11'},
+    {n:'Kim Kardashian',e:'💅',d:'Oct 21'},
+    {n:'Pelé',e:'⚽',d:'Oct 23'},
+    {n:'Ryan Reynolds',e:'😄',d:'Oct 23'},
+    {n:'Drake',e:'🎤',d:'Oct 24'},
+    {n:'Katy Perry',e:'🎤',d:'Oct 25'},
+    {n:'Bill Gates',e:'💻',d:'Oct 28'},
+  ],
+
+  10:[
+    {n:'Kendall Jenner',e:'💄',d:'Nov 3'},
+    {n:'Emma Stone',e:'🎬',d:'Nov 6'},
+    {n:'SZA',e:'🎵',d:'Nov 8'},
+    {n:'Gordon Ramsay',e:'👨‍🍳',d:'Nov 8'},
+    {n:'Leonardo DiCaprio',e:'🎬',d:'Nov 11'},
+    {n:'Whoopi Goldberg',e:'🌟',d:'Nov 13'},
+    {n:'Miley Cyrus',e:'🎤',d:'Nov 23'},
+  ],
+
+  11:[
+    {n:'Britney Spears',e:'💫',d:'Dec 2'},
+    {n:'Jay-Z',e:'🎶',d:'Dec 4'},
+    {n:'Taylor Swift',e:'🎵',d:'Dec 13'},
+    {n:'Brad Pitt',e:'🌟',d:'Dec 18'},
+    {n:'Billie Eilish',e:'🖤',d:'Dec 18'},
+    {n:'Denzel Washington',e:'🎬',d:'Dec 28'},
+    {n:'LeBron James',e:'🏀',d:'Dec 30'},
+  ],
+};
+
+const ZODIAC = [
+  {sign:'Capricorn',emoji:'♑',dates:'Dec 22 – Jan 19',traits:['Ambitious','Disciplined','Practical','Patient']},
+  {sign:'Aquarius',emoji:'♒',dates:'Jan 20 – Feb 18',traits:['Creative','Independent','Humanitarian','Witty']},
+  {sign:'Pisces',emoji:'♓',dates:'Feb 19 – Mar 20',traits:['Compassionate','Artistic','Intuitive','Gentle']},
+  {sign:'Aries',emoji:'♈',dates:'Mar 21 – Apr 19',traits:['Energetic','Brave','Determined','Enthusiastic']},
+  {sign:'Taurus',emoji:'♉',dates:'Apr 20 – May 20',traits:['Reliable','Patient','Devoted','Loving']},
+  {sign:'Gemini',emoji:'♊',dates:'May 21 – Jun 20',traits:['Adaptable','Curious','Affectionate','Quick-witted']},
+  {sign:'Cancer',emoji:'♋',dates:'Jun 21 – Jul 22',traits:['Nurturing','Loyal','Intuitive','Caring']},
+  {sign:'Leo',emoji:'♌',dates:'Jul 23 – Aug 22',traits:['Charismatic','Generous','Creative','Warm-hearted']},
+  {sign:'Virgo',emoji:'♍',dates:'Aug 23 – Sep 22',traits:['Analytical','Kind','Hardworking','Detail-oriented']},
+  {sign:'Libra',emoji:'♎',dates:'Sep 23 – Oct 22',traits:['Diplomatic','Gracious','Fair-minded','Social']},
+  {sign:'Scorpio',emoji:'♏',dates:'Oct 23 – Nov 21',traits:['Brave','Passionate','Resourceful','Determined']},
+  {sign:'Sagittarius',emoji:'♐',dates:'Nov 22 – Dec 21',traits:['Adventurous','Generous','Idealistic','Fun-loving']},
+];
+
+function initCalendar() {
+  const today = new Date();
+  calYear = today.getFullYear();
+  calMonth = today.getMonth();
+  renderCalendar();
+}
+
+function calNav(dir) {
+  calMonth += dir;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calMonthYear').textContent = `${monthNames[calMonth]} ${calYear}`;
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+
+  let html = '';
+  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day cal-day--empty"></div>`;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const thisDate = new Date(calYear, calMonth, d);
+    thisDate.setHours(0,0,0,0);
+    const isFuture = thisDate > today;
+    const isToday = thisDate.getTime() === today.getTime();
+    const isSelected = selectedDate && thisDate.getTime() === selectedDate.getTime();
+
+    let cls = 'cal-day';
+    if (isFuture) cls += ' cal-day--future';
+    else if (isSelected) cls += ' cal-day--selected';
+    else if (isToday) cls += ' cal-day--today';
+
+    const clickHandler = isFuture ? '' : `onclick="selectCalDay(${calYear},${calMonth},${d})"`;
+    html += `<div class="${cls}" ${clickHandler}>${d}</div>`;
+  }
+
+  document.getElementById('calDays').innerHTML = html;
+}
+
+function selectCalDay(y, m, d) {
+  selectedDate = new Date(y, m, d);
+  selectedDate.setHours(0,0,0,0);
+  const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calSelectedDisplay').innerHTML =
+    `Selected: <strong>${dayNames[selectedDate.getDay()]}, ${monthNames[m]} ${d}, ${y}</strong>`;
+  renderCalendar();
+}
+
+// ── Slider Logic ──────────────────────────────────────────────────────────────
+
+function onSliderMove(val) {
+  sliderMoved = true;
+  document.getElementById('sliderVal').innerHTML = `${val} <span>weeks</span>`;
+  const slider = document.getElementById('weeksSlider');
+  const pct = ((val - 1) / (42 - 1)) * 100;
+  slider.style.background = `linear-gradient(to right, var(--rose) 0%, var(--rose) ${pct}%, #f0e4de ${pct}%, #f0e4de 100%)`;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('sliderVal').innerHTML = `— <span>weeks</span>`;
+  initCalendar();
+});
+
+function getZodiac(date) {
+  const m = date.getMonth() + 1, d = date.getDate();
+  if ((m===12&&d>=22)||(m===1&&d<=19)) return ZODIAC[0];
+  if (m===1||(m===2&&d<=18)) return ZODIAC[1];
+  if ((m===2&&d>=19)||(m===3&&d<=20)) return ZODIAC[2];
+  if ((m===3&&d>=21)||(m===4&&d<=19)) return ZODIAC[3];
+  if ((m===4&&d>=20)||(m===5&&d<=20)) return ZODIAC[4];
+  if ((m===5&&d>=21)||(m===6&&d<=20)) return ZODIAC[5];
+  if ((m===6&&d>=21)||(m===7&&d<=22)) return ZODIAC[6];
+  if ((m===7&&d>=23)||(m===8&&d<=22)) return ZODIAC[7];
+  if ((m===8&&d>=23)||(m===9&&d<=22)) return ZODIAC[8];
+  if ((m===9&&d>=23)||(m===10&&d<=22)) return ZODIAC[9];
+  if ((m===10&&d>=23)||(m===11&&d<=21)) return ZODIAC[10];
+  return ZODIAC[11];
+}
+
+function getMilestones(week) {
+  let result = MILESTONES[4];
+  for (const k of Object.keys(MILESTONES).map(Number).sort((a,b)=>a-b)) {
+    if (k <= week) result = MILESTONES[k];
+  }
+  return result;
+}
+
+function getTips(week) {
+  let result = WEEK_TIPS[4];
+  for (const k of Object.keys(WEEK_TIPS).map(Number).sort((a,b)=>a-b)) {
+    if (k <= week) result = WEEK_TIPS[k];
+  }
+  return result;
+}
+
+function getBabySize(week) {
+  return BABY_SIZES[Math.min(42, Math.max(4, week))] || BABY_SIZES[40];
+}
+
+function getSeasonalEvents(dueDate) {
+  const m = dueDate.getMonth();
+  const s = m<=2?0:m<=5?1:m<=8?2:m<=10?3:4;
+  return SEASONAL_EVENTS[s] || [];
+}
+
+function getHolidays(dueDate) {
+  const m = dueDate.getMonth(), d = dueDate.getDate();
+  const holidays = [];
+  const nearby = [
+    {check:(m,d)=>m===0&&d<=15,name:'🎊 New Year\'s Season',note:"Baby's first New Year!"},
+    {check:(m,d)=>m===1&&Math.abs(d-14)<=10,name:'💕 Valentine\'s Season',note:'A baby is the most beautiful valentine!'},
+    {check:(m,d)=>m===11||m===0&&d<=7,name:'🎄 Holiday Season',note:'A very special holiday gift!'},
+    {check:(m,d)=>m===9&&Math.abs(d-31)<=10,name:'🎃 Halloween Season',note:'The spookiest (and cutest!) arrival!'},
+    {check:(m,d)=>m===6&&Math.abs(d-4)<=10,name:'🎆 Independence Day',note:'A truly independent little one!'},
+  ];
+  for (const h of nearby) if (h.check(m,d)) holidays.push(h);
+  return holidays;
+}
+
+function formatDate(date) {
+  return date.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+function formatShortDate(date) {
+  return date.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+}
+function getTrimester(week) {
+  if (week<=13) return {num:1,label:'First Trimester'};
+  if (week<=26) return {num:2,label:'Second Trimester'};
+  return {num:3,label:'Third Trimester'};
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+
+function render(totalWeeks) {
+  totalWeeks = Math.max(1, Math.min(42, totalWeeks));
+  const today = new Date();
+  const daysPregnant = totalWeeks * 7;
+  const daysLeft = 280 - daysPregnant;
+  const dueDate = new Date(today.getTime() + daysLeft * 86400000);
+
+  const pct = Math.min(100, Math.round((daysPregnant / 280) * 100));
+  const trimester = getTrimester(totalWeeks);
+  const babySize = getBabySize(totalWeeks);
+  const zodiac = getZodiac(dueDate);
+  const milestones = getMilestones(totalWeeks);
+  const tips = getTips(totalWeeks);
+  const seasonalEvts = getSeasonalEvents(dueDate);
+  const holidays = getHolidays(dueDate);
+  const famousBdays = FAMOUS_BIRTHDAYS_BY_MONTH[dueDate.getMonth()] || [];
+  const seasons = ['Winter','Winter','Spring','Spring','Spring','Summer','Summer','Summer','Autumn','Autumn','Autumn','Winter'];
+
+  const daysLeftLabel = daysLeft<=0 ? 'Your due date has passed 💗'
+    : daysLeft===1 ? '1 day to go!'
+    : `${daysLeft} days to go`;
+
+  const html = `
+  <div class="progress-hero">
+    <div class="hero-top">
+      <div class="week-display">
+        <div class="week-label">You are</div>
+        <div class="week-number">${totalWeeks}<span class="week-suffix"> wks</span></div>
+        <div class="week-sub">pregnant</div>
+        <div class="trimester-badge">${trimester.label} · ${pct}% complete</div>
+      </div>
+      <div class="due-date-display">
+        <div class="label">Due Date</div>
+        <div class="date">${dueDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
+        <div class="days-left">${daysLeftLabel}</div>
+      </div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-labels">
+        <span>Week 1</span><span>Week 14</span><span>Week 27</span><span>Week 40</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" style="width:${pct}%"></div>
+      </div>
+      <div class="trimester-markers">
+        <span>🌸 1st Trimester</span>
+        <span>🌺 2nd Trimester</span>
+        <span>🌷 3rd Trimester</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card size-card">
+      <div class="baby-visual">${babySize.emoji}</div>
+      <div class="baby-size-info">
+        <div class="card-title">Baby's Size This Week</div>
+        <div class="card-main">About the size of a <strong>${babySize.fruit}</strong></div>
+        <div class="size-bars">
+          <div class="size-bar-row">
+            <span class="size-bar-label">Length</span>
+            <div class="size-bar-track"><div class="size-bar-fill" style="width:${Math.min(100,(totalWeeks/42)*100)}%"></div></div>
+            <span class="size-bar-val">${babySize.length}</span>
+          </div>
+          <div class="size-bar-row">
+            <span class="size-bar-label">Weight</span>
+            <div class="size-bar-track"><div class="size-bar-fill" style="width:${Math.min(100,(totalWeeks/42)*100)}%"></div></div>
+            <span class="size-bar-val">${babySize.weight}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="card-icon">🌱</span>
+      <div class="card-title">Development Milestones</div>
+      <div class="milestone-list">
+        ${milestones.map(m=>`<div class="milestone-item"><div class="milestone-check">✓</div><span>${m}</span></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="card-icon">💡</span>
+      <div class="card-title">Tips For This Week</div>
+      <ul class="tips-list">
+        ${tips.map(t=>`<li><span class="tip-icon">🌿</span>${t}</li>`).join('')}
+      </ul>
+    </div>
+  </div>
+
+  <div class="due-section">
+    <h3>📅 Around Your Due Date — ${formatShortDate(dueDate)}</h3>
+    <div class="events-list">
+      <div class="event-item">
+        <div class="event-dot"></div>
+        <div class="event-text">
+          <div class="event-name">🌙 It will be a ${dueDate.toLocaleDateString('en-US',{weekday:'long'})}</div>
+          <div class="event-date">${formatDate(dueDate)}</div>
+        </div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot sage"></div>
+        <div class="event-text">
+          <div class="event-name">🌤️ Season — ${seasons[dueDate.getMonth()]}</div>
+          <div class="event-date">Your baby will arrive in a beautiful ${seasons[dueDate.getMonth()].toLowerCase()} season</div>
+        </div>
+      </div>
+      ${seasonalEvts.map(([name,date])=>`
+        <div class="event-item">
+          <div class="event-dot gold"></div>
+          <div class="event-text">
+            <div class="event-name">${name}</div>
+            <div class="event-date">${date}</div>
+          </div>
+        </div>`).join('')}
+      ${holidays.map(h=>`
+        <div class="event-item">
+          <div class="event-dot" style="background:#c9a96e"></div>
+          <div class="event-text">
+            <div class="event-name">${h.name}</div>
+            <div class="event-date">${h.note}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+  </div>
+
+  <div class="due-section">
+    <h3>🎂 Famous Birthdays in ${dueDate.toLocaleDateString('en-US',{month:'long'})}</h3>
+    <div class="birthdays-grid">
+      ${famousBdays.map(p=>`
+        <div class="birthday-card">
+          <span class="birthday-emoji">${p.e}</span>
+          <div class="birthday-name">${p.n}</div>
+          <div class="birthday-detail">${p.d}</div>
+        </div>`).join('')}
+    </div>
+  </div>
+  `;
+
+  const el = document.getElementById('results');
+  el.innerHTML = html;
+  el.style.display = 'block';
+  el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function calculateFromSlider() {
+  const weeks = parseInt(document.getElementById('weeksSlider').value);
+  if (!sliderMoved) {
+    alert('Please drag the slider to set how many weeks pregnant you are 🌸');
+    return;
+  }
+  render(weeks);
+}
+
+function calculateFromCalendar() {
+  if (!selectedDate) {
+    alert('Please tap a date on the calendar first 🌸');
+    return;
+  }
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const diffDays = Math.floor((today - selectedDate) / 86400000);
+  if (diffDays < 0) { alert('Please select a date in the past.'); return; }
+  const weeks = Math.floor(diffDays / 7);
+  document.getElementById('weeksSlider').value = Math.min(42, weeks);
+  onSliderMove(Math.min(42, weeks));
+  sliderMoved = true;
+  render(weeks);
+}
+</script>
+</body>
+</html>
